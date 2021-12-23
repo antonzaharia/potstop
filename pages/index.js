@@ -22,6 +22,13 @@ export default function Home() {
   // 4. make the user name look good
   // 5. let the user post their own reply
 
+  const [account, setAccount] = useState()
+
+  const connect = async function() {
+    let a = await window.ethereum.request({ method: "eth_requestAccounts" })
+    setAccount(a)
+  }
+
   return (
     <main>
       <header>
@@ -31,7 +38,7 @@ export default function Home() {
           <input type="text" placeholder="Search" />
         </form>
 
-        <button>Connect</button>
+        <Account account={account} connect={connect} />
       </header>
 
       <section className="question">
