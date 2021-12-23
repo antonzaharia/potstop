@@ -6,7 +6,7 @@ const Answer = function ({ number, answer, accounts, isLoggedIn }) {
   return (
     <div className="answer">
       <h3>Reply #{number}</h3>
-      <div className="main" dangerouslySetInnerHTML={reply}></div>
+      <div className="main" dangerouslySetInnerHTML={reply} />
       <div className="meta">
         <EthName address={answer.account} />
         <Tip isLoggedIn={isLoggedIn} accounts={accounts} address={answer.account} />
