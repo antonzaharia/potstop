@@ -58,10 +58,8 @@ export default function handler(req, res) {
       { questionId: 1, answerId: 2, reply: answers[1], account: "0xb25bf3990c5a274a758a2a3a4cc90b3e407eaaf4" },
       { questionId: 1, answerId: 3, reply: answers[2], account: "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65" }
     ]
-  
-    res
-      .setHeader('Content-Type', 'application/json')
-      .status(200)
-      .json({ answers: data })
+
+    res.setHeader('Content-Type', 'application/json')
+    res.status(200).json({ answers: data })
   }
 }

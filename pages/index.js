@@ -22,11 +22,49 @@ export default function Home() {
   // 4. make the user name look good
   // 5. let the user post their own reply
 
-  const [account, setAccount] = useState()
+  const [accounts, setAccounts] = useState([])
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [answers, setAnswers] = useState([])
+
+  useEffect(() => {
+    if (accounts.length > 0) {
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
+  }, [accounts])
+
+  useEffect(async function() {
+    let a = await window.ethereum.request({ method: 'eth_accounts'})
+    setAccounts(a)
+
+    window.ethereum.on('accountsChanged', function(a) {
+      setAccounts(a)
+    })
+
+    fetch("/api/answers")
+        .then(resp => resp.json())
+        .then(data => {
+          setAnswers(data.answers)
+          setIsLoading(false)
+        })
+  }, [])
+
+  let answersArea = (
+      <div className="loading">Loading answers...</div>
+  )
+  if (!isLoading) {
+    answersArea = answers.map((answer, index) => {
+      return (
+          <Answer key={index + 1} number={index + 1} answer={answer} accounts={accounts} isLoggedIn={isLoggedIn} />
+      )
+    })
+  }
 
   const connect = async function() {
     let a = await window.ethereum.request({ method: "eth_requestAccounts" })
-    setAccount(a)
+    setAccounts(a)
   }
 
   return (
@@ -38,7 +76,7 @@ export default function Home() {
           <input type="text" placeholder="Search" />
         </form>
 
-        <Account account={account} connect={connect} />
+        <Account accounts={accounts} isLoggedIn={isLoggedIn} connect={connect} />
       </header>
 
       <section className="question">
@@ -70,7 +108,7 @@ export default function Home() {
       </section>
 
       <section className="answers">
-        <div className="loading">Loading answers...</div>
+        {answersArea}
       </section>
 
       <Head>
