@@ -9,10 +9,8 @@ const ens = new ENS({
 })
 
 const EnsName = function ({ address }) {
-  // TODO!
-  // check for ENS domain
-  // get image if it has one
     const [name, setName] = useState()
+    const [avatar, setAvatar] = useState()
 
     useEffect(async function () {
         const n = await ens.getName(address)
@@ -21,6 +19,14 @@ const EnsName = function ({ address }) {
         }
     }, [address])
 
+    useEffect(async function () {
+        if (name) {
+            const a = await ens.name(name).getText("avatar")
+            if (a) {
+                setAvatar(a)
+            }
+        }
+    }, [name])
 
   let formattedAddress = address.substr(0, 8) + '...' + address.substr(-4)
 
@@ -31,7 +37,9 @@ const EnsName = function ({ address }) {
   return (
     <div className="eth-name">
       <div className="icon">
-          {icon}
+          {avatar ? (
+              <img src={avatar} />
+          ) : icon}
       </div>
 
       <div className="name">
