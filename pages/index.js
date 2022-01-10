@@ -109,6 +109,7 @@ export default function Home() {
 
       <section className="answers">
         {answersArea}
+        <AnswerForm accounts={accounts} setAnswers={setAnswers} isLoggedIn={isLoggedIn} />
       </section>
 
       <Head>
